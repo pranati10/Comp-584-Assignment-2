@@ -1,0 +1,17 @@
+version: '3.1'
+services:
+  tempo:
+    build:
+      context: ./tempo
+      dockerfile: Dockerfile
+    restart: always
+    command: gunicorn -b 0.0.0.0:5011 "app:create_app()" --reload
+    volumes:
+      - ./tempo:/code
+  nginx:
+    build: nginx
+    restart: always
+    ports:
+      - 8086:80
+    depends_on: 
+      - tempo
